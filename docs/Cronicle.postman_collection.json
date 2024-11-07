@@ -1,0 +1,610 @@
+{
+	"info": {
+		"_postman_id": "6841c61a-bd31-4ef0-bcd3-aece12e2a272",
+		"name": "Cronicle",
+		"description": "## Event Data Format\n\nHere are descriptions of all the properties in the event object, which is common in many API calls:\n\n| Event Property | Format | Description |\n| --- | --- | --- |\n| `algo` | String | Specifies the algorithm to use for picking a server from the target group. See [Algorithm](https://github.com/jhuckaby/Cronicle/blob/master/docs/WebUI.md#algorithm). |\n| `api_key` | String | The API Key of the application that originally created the event (if created via API). |\n| `catch_up` | Boolean | Specifies whether the event has [Run All Mode](https://github.com/jhuckaby/Cronicle/blob/master/docs/WebUI.md#run-all-mode) enabled or not. |\n| `category` | String | The Category ID to which the event is assigned. See [Categories Tab](https://github.com/jhuckaby/Cronicle/blob/master/docs/WebUI.md#categories-tab). |\n| `chain` | String | The chain reaction event ID to launch when jobs complete successfully. See [Chain Reaction](https://github.com/jhuckaby/Cronicle/blob/master/docs/WebUI.md#chain-reaction). |\n| `chain_error` | String | The chain reaction event ID to launch when jobs fail. See [Chain Reaction](https://github.com/jhuckaby/Cronicle/blob/master/docs/WebUI.md#chain-reaction). |\n| `cpu_limit` | Number | Limit the CPU to the specified percentage (100 = 1 core), abort if exceeded. See [Event Resource Limits](https://github.com/jhuckaby/Cronicle/blob/master/docs/WebUI.md#event-resource-limits). |\n| `cpu_sustain` | Number | Only abort if the CPU limit is exceeded for this many seconds. See [Event Resource Limits](https://github.com/jhuckaby/Cronicle/blob/master/docs/WebUI.md#event-resource-limits). |\n| `created` | Number | The date/time of the event's initial creation, in Epoch seconds. |\n| `detached` | Boolean | Specifies whether [Detached Mode](https://github.com/jhuckaby/Cronicle/blob/master/docs/WebUI.md#detached-mode) is enabled or not. |\n| `enabled` | Boolean | Specifies whether the event is enabled (active in the scheduler) or not. |\n| `id` | String | A unique ID assigned to the event when it was first created. |\n| `log_max_size` | Number | Limit the job log file size to the specified amount, in bytes. See [Event Resource Limits](https://github.com/jhuckaby/Cronicle/blob/master/docs/WebUI.md#event-resource-limits). |\n| `max_children` | Number | The total amount of concurrent jobs allowed to run. See [Event Concurrency](https://github.com/jhuckaby/Cronicle/blob/master/docs/WebUI.md#event-concurrency). |\n| `memory_limit` | Number | Limit the memory usage to the specified amount, in bytes. See [Event Resource Limits](https://github.com/jhuckaby/Cronicle/blob/master/docs/WebUI.md#event-resource-limits). |\n| `memory_sustain` | Number | Only abort if the memory limit is exceeded for this many seconds. See [Event Resource Limits](https://github.com/jhuckaby/Cronicle/blob/master/docs/WebUI.md#event-resource-limits). |\n| `modified` | Number | The date/time of the event's last modification, in Epoch seconds. |\n| `multiplex` | Boolean | Specifies whether the event has [Multiplexing](https://github.com/jhuckaby/Cronicle/blob/master/docs/WebUI.md#multiplexing) mode is enabled or not. |\n| `notes` | String | Text notes saved with the event, included in e-mail notifications. See [Event Notes](https://github.com/jhuckaby/Cronicle/blob/master/docs/WebUI.md#event-notes). |\n| `notify_fail` | String | List of e-mail recipients to notify upon job failure (CSV). See [Event Notification](https://github.com/jhuckaby/Cronicle/blob/master/docs/WebUI.md#event-notification). |\n| `notify_success` | String | List of e-mail recipients to notify upon job success (CSV). See [Event Notification](https://github.com/jhuckaby/Cronicle/blob/master/docs/WebUI.md#event-notification). |\n| `params` | Object | An object containing the Plugin's custom parameters, filled out with values from the Event Editor. See [Plugins Tab](https://github.com/jhuckaby/Cronicle/blob/master/docs/WebUI.md#plugins-tab). |\n| `plugin` | String | The ID of the Plugin which will run jobs for the event. See [Plugins Tab](https://github.com/jhuckaby/Cronicle/blob/master/docs/WebUI.md#plugins-tab). |\n| `queue` | Boolean | Allow jobs to be queued up when they can't run immediately. See [Allow Queued Jobs](https://github.com/jhuckaby/Cronicle/blob/master/docs/WebUI.md#allow-queued-jobs). |\n| `queue_max` | Number | Maximum queue length, when `queue` is enabled. See [Allow Queued Jobs](https://github.com/jhuckaby/Cronicle/blob/master/docs/WebUI.md#allow-queued-jobs). |\n| `retries` | Number | The number of retries to allow before reporting an error. See [Event Retries](https://github.com/jhuckaby/Cronicle/blob/master/docs/WebUI.md#event-retries). |\n| `retry_delay` | Number | Optional delay between retries, in seconds. See [Event Retries](https://github.com/jhuckaby/Cronicle/blob/master/docs/WebUI.md#event-retries). |\n| `stagger` | Number | If [Multiplexing](https://github.com/jhuckaby/Cronicle/blob/master/docs/WebUI.md#multiplexing) is enabled, this specifies the number of seconds to wait between job launches. |\n| `target` | String | Events can target a [Server Group](https://github.com/jhuckaby/Cronicle/blob/master/docs/WebUI.md#server-groups) (Group ID), or an individual server (hostname). |\n| `timeout` | Number | The maximum allowed run time for jobs, specified in seconds. See [Event Timeout](https://github.com/jhuckaby/Cronicle/blob/master/docs/WebUI.md#event-timeout). |\n| `timezone` | String | The timezone for interpreting the event timing settings. Needs to be an [IANA timezone string](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones). See [Event Timing](https://github.com/jhuckaby/Cronicle/blob/master/docs/WebUI.md#event-timing). |\n| `timing` | Object | An object describing when to run scheduled jobs. See [Event Timing Object](https://github.com/jhuckaby/Cronicle/blob/master/docs/APIReference.md#event-timing-object) below for details. |\n| `title` | String | A display name for the event, shown on the [Schedule Tab](https://github.com/jhuckaby/Cronicle/blob/master/docs/WebUI.md#schedule-tab) as well as in reports and e-mails. |\n| `username` | String | The username of the user who originally created the event (if created in the UI). |\n| `web_hook` | String | An optional URL to hit for the start and end of each job. See [Event Web Hook](https://github.com/jhuckaby/Cronicle/blob/master/docs/WebUI.md#event-web-hook). |\n\n### Event Timing Object\n\nThe `timing` object describes the event's timing settings (when and how frequent it should run jobs). It works similarly to the [Unix Cron](https://en.wikipedia.org/wiki/Cron) system, with selections of years, months, days, weekdays, hours and/or minutes. Each property should be an array of numerical values. If omitted, it means the same as \"all\" in that category (i.e. asterisk `\\\\\\*` in Cron syntax).\n\nFor example, an event with this timing object would run once per hour, on the hour:\n\n```\n{\n    \"minutes\": [0]\n}\n\n ```\n\nIt essentially means every year, every month, every day, every hour, but only on the \"0\" minute. The scheduler ticks only once a minute, so this only results in running one job for each matching minute.\n\nFor another example, this would run twice daily, at 4:30 AM and 4:30 PM:\n\n```\n{\n    \"hours\": [4, 16],\n    \"minutes\": [30]\n}\n\n ```\n\nFor a more complex example, this would run only in year 2015, from March to May, on the 1st and 15th of the month (but only if also weekdays), at 6AM to 10AM, and on the :15 and :45 of those hours:\n\n```\n{\n    \"years\": [2015],\n    \"months\": [3, 4, 5],\n    \"days\": [1, 15],\n    \"weekdays\": [1, 2, 3, 4, 5],\n    \"hours\": [6, 7, 8, 9, 10],\n    \"minutes\": [15, 45]\n}\n\n ```\n\nHere is a list of all the timing object properties and their descriptions:\n\n| Timing Property | Range | Description |\n| --- | --- | --- |\n| `years` | ∞ | One or more years in YYYY format. |\n| `months` | 1 - 12 | One or more months, where January is 1 and December is 12. |\n| `days` | 1 - 31 | One or more month days, from 1 to 31. |\n| `weekdays` | 0 - 6 | One or more weekdays, where Sunday is 0, and Saturday is 6 |\n| `hours` | 0 - 23 | One or more hours in 24-hour time, from 0 to 23. |\n| `minutes` | 0 - 59 | One or more minutes, from 0 to 59. |",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24174631"
+	},
+	"item": [
+		{
+			"name": "get_schedule",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-API-Key",
+						"value": "{{API-KEY}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"offset\": 0,\r\n\t\"limit\": 1000\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/app/get_schedule/v1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"app",
+						"get_schedule",
+						"v1"
+					],
+					"query": [
+						{
+							"key": "offset",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "limit",
+							"value": "1",
+							"disabled": true
+						}
+					]
+				},
+				"description": "This fetches scheduled events and returns details about them. It supports pagination to fetch chunks, with the default being the first 50 events. Both HTTP GET (query string) or HTTP POST (JSON data) are acceptable. Parameters:\n\n| Parameter Name | Description |\n| --- | --- |\n| `offset` | (Optional) The offset into the data to start returning records, defaults to 0. |\n| `limit` | (Optional) The number of records to return, defaults to 50. |\n\nExample request:\n\n```\n{\n    \"offset\": 0,\n    \"limit\": 1000\n}\n\n ```\n\nExample response:\n\n```\n{\n    \"code\": 0,\n    \"rows\": [\n        {\n            \"enabled\": 1,\n            \"params\": {\n                \"script\": \"#!/bin/sh\\n\\n/usr/local/bin/db-reindex.pl\\n\"\n            },\n            \"timing\": {\n                \"minutes\": [ 10 ]\n            },\n            \"max_children\": 1,\n            \"timeout\": 3600,\n            \"catch_up\": false,\n            \"plugin\": \"shellplug\",\n            \"title\": \"Rebuild Indexes\",\n            \"category\": \"general\",\n            \"target\": \"c33ff006\",\n            \"multiplex\": 0,\n            \"retries\": 0,\n            \"detached\": 0,\n            \"notify_success\": \"\",\n            \"notify_fail\": \"\",\n            \"web_hook\": \"\",\n            \"notes\": \"\",\n            \"id\": \"29bf12db\",\n            \"modified\": 1445233242,\n            \"created\": 1445233022,\n            \"username\": \"admin\",\n            \"timezone\": \"America/Los_Angeles\"\n        }\n    ],\n    \"list\": {\n        \"page_size\": 50,\n        \"first_page\": 0,\n        \"last_page\": 0,\n        \"length\": 12,\n        \"type\": \"list\"\n    }\n}\n\n ```"
+			},
+			"response": []
+		},
+		{
+			"name": "get_event",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-API-Key",
+						"value": "{{API-KEY}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"id\": \"540cf457\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/app/get_event/v1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"app",
+						"get_event",
+						"v1"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": null,
+							"disabled": true
+						},
+						{
+							"key": "title",
+							"value": null,
+							"disabled": true
+						}
+					]
+				},
+				"description": "This fetches details about a single event, given its ID or exact title. Both HTTP GET (query string) or HTTP POST (JSON data) are acceptable. Parameters:\n\n| Parameter Name | Description |\n| --- | --- |\n| `id` | The ID of the event you wish to fetch details on. |\n| `title` | The exact title of the event you wish to fetch details on (case-sensitive). |\n\nExample request:\n\n```\n{\n    \"id\": \"540cf457\"\n}\n\n ```\n\nExample response:\n\n```\n{\n    \"code\": 0,\n    \"event\": {\n        \"enabled\": 0,\n        \"params\": {\n            \"script\": \"#!/bin/sh\\n\\n/usr/local/bin/s3-backup-logs.pl\\n\"\n        },\n        \"timing\": {\n            \"minutes\": [ 5 ]\n        },\n        \"max_children\": 1,\n        \"timeout\": 3600,\n        \"catch_up\": false,\n        \"plugin\": \"shellplug\",\n        \"title\": \"Backup Logs to S3\",\n        \"category\": \"ad8190ff\",\n        \"target\": \"all\",\n        \"multiplex\": 0,\n        \"retries\": 0,\n        \"detached\": 0,\n        \"notify_success\": \"\",\n        \"notify_fail\": \"\",\n        \"web_hook\": \"\",\n        \"notes\": \"\",\n        \"id\": \"540cf457\",\n        \"modified\": 1449941100,\n        \"created\": 1445232960,\n        \"username\": \"admin\",\n        \"retry_delay\": 0,\n        \"cpu_limit\": 0,\n        \"cpu_sustain\": 0,\n        \"memory_limit\": 0,\n        \"memory_sustain\": 0,\n        \"log_max_size\": 0,\n        \"timezone\": \"America/Los_Angeles\"\n    }\n}\n\n ```"
+			},
+			"response": []
+		},
+		{
+			"name": "create_event",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-API-Key",
+						"value": "{{API-KEY}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"catch_up\": 1,\r\n\t\"category\": \"43f8c57e\",\r\n\t\"cpu_limit\": 100,\r\n\t\"cpu_sustain\": 0,\r\n\t\"detached\": 0,\r\n\t\"enabled\": 1,\r\n\t\"log_max_size\": 0,\r\n\t\"max_children\": 1,\r\n\t\"memory_limit\": 0,\r\n\t\"memory_sustain\": 0,\r\n\t\"modified\": 1451185588,\r\n\t\"multiplex\": 0,\r\n\t\"notes\": \"This event handles database maintenance.\",\r\n\t\"notify_fail\": \"\",\r\n\t\"notify_success\": \"\",\r\n\t\"params\": {\r\n\t\t\"db_host\": \"idb01.mycompany.com\",\r\n\t\t\"verbose\": 1,\r\n\t\t\"cust\": \"Sales\"\r\n\t},\r\n\t\"plugin\": \"test\",\r\n\t\"retries\": 0,\r\n\t\"retry_delay\": 30,\r\n\t\"target\": \"db1.int.myserver.com\",\r\n\t\"timeout\": 3600,\r\n\t\"timezone\": \"America/New_York\",\r\n\t\"timing\": {\r\n\t\t\"hours\": [ 21 ],\r\n\t\t\"minutes\": [ 20, 40 ]\r\n\t},\r\n\t\"title\": \"DB Reindex\",\r\n\t\"web_hook\": \"http://myserver.com/notify-chronos.php\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/app/get_event/v1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"app",
+						"get_event",
+						"v1"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				},
+				"description": "This creates a new event and adds it to the schedule. API Keys require the `create_events` privilege to use this API. Only HTTP POST (JSON data) is acceptable. The required parameters are as follows:\n\n| Parameter Name | Description |\n| --- | --- |\n| `title` | **(Required)** A display name for the event, shown on the [Schedule Tab](https://github.com/jhuckaby/Cronicle/blob/master/docs/WebUI.md#schedule-tab) as well as in reports and e-mails. |\n| `enabled` | **(Required)** Specifies whether the event is enabled (active in the scheduler) or not. Should be set to 1 or 0. |\n| `category` | **(Required)** The Category ID to which the event will be assigned. See [Categories Tab](https://github.com/jhuckaby/Cronicle/blob/master/docs/WebUI.md#categories-tab). |\n| `plugin` | **(Required)** The ID of the Plugin which will run jobs for the event. See [Plugins Tab](https://github.com/jhuckaby/Cronicle/blob/master/docs/WebUI.md#plugins-tab). |\n| `target` | **(Required)** Events can target a [Server Group](https://github.com/jhuckaby/Cronicle/blob/master/docs/WebUI.md#server-groups) (Group ID), or an individual server (hostname). |\n\nIn addition to the required parameters, almost anything in the [Event Data Object](https://github.com/jhuckaby/Cronicle/blob/master/docs/APIReference.md#event-data-format) can also be included here. Example request:\n\n```\n{\n    \"catch_up\": 1,\n    \"category\": \"43f8c57e\",\n    \"cpu_limit\": 100,\n    \"cpu_sustain\": 0,\n    \"detached\": 0,\n    \"enabled\": 1,\n    \"log_max_size\": 0,\n    \"max_children\": 1,\n    \"memory_limit\": 0,\n    \"memory_sustain\": 0,\n    \"modified\": 1451185588,\n    \"multiplex\": 0,\n    \"notes\": \"This event handles database maintenance.\",\n    \"notify_fail\": \"\",\n    \"notify_success\": \"\",\n    \"params\": {\n        \"db_host\": \"idb01.mycompany.com\",\n        \"verbose\": 1,\n        \"cust\": \"Sales\"\n    },\n    \"plugin\": \"test\",\n    \"retries\": 0,\n    \"retry_delay\": 30,\n    \"target\": \"db1.int.myserver.com\",\n    \"timeout\": 3600,\n    \"timezone\": \"America/New_York\",\n    \"timing\": {\n        \"hours\": [ 21 ],\n        \"minutes\": [ 20, 40 ]\n    },\n    \"title\": \"DB Reindex\",\n    \"web_hook\": \"http://myserver.com/notify-chronos.php\"\n}\n\n ```\n\nIn the above example we've included a `timing` object, and set it to run daily at 9:20 PM and 9:40 PM in the `America/New_York` timezone. If you omit the `timing` object entirely, the event becomes \"on demand\", and can only be run manually via user or API. If you do include a `timing` object but keep it empty (no properties inside it), the event will run **every** minute of **every** day of **every** month of **every** year.\n\nExample response:\n\n```\n{\n    \"code\": 0,\n    \"id\": \"540cf457\"\n}\n\n ```"
+			},
+			"response": []
+		},
+		{
+			"name": "update_event",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-API-Key",
+						"value": "{{API-KEY}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"id\": \"3c182051\",\r\n\t\"reset_cursor\": 1451185588,\r\n\t\"abort_jobs\": 0,\r\n\t\"catch_up\": 1,\r\n\t\"category\": \"43f8c57e\",\r\n\t\"cpu_limit\": 100,\r\n\t\"cpu_sustain\": 0,\r\n\t\"detached\": 0,\r\n\t\"enabled\": 1,\r\n\t\"log_max_size\": 0,\r\n\t\"max_children\": 1,\r\n\t\"memory_limit\": 0,\r\n\t\"memory_sustain\": 0,\r\n\t\"multiplex\": 0,\r\n\t\"notes\": \"This event handles database maintenance.\",\r\n\t\"notify_fail\": \"\",\r\n\t\"notify_success\": \"\",\r\n\t\"params\": {\r\n\t\t\"db_host\": \"idb01.mycompany.com\",\r\n\t\t\"verbose\": 1,\r\n\t\t\"cust\": \"Marketing\"\r\n\t},\r\n\t\"plugin\": \"test\",\r\n\t\"retries\": 0,\r\n\t\"retry_delay\": 30,\r\n\t\"target\": \"db1.int.myserver.com\",\r\n\t\"timeout\": 3600,\r\n\t\"timezone\": \"America/New_York\",\r\n\t\"timing\": {\r\n\t\t\"hours\": [ 21 ],\r\n\t\t\"minutes\": [ 20, 40 ]\r\n\t},\r\n\t\"title\": \"DB Reindex\",\r\n\t\"username\": \"admin\",\r\n\t\"web_hook\": \"http://myserver.com/notify-chronos.php\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/app/update_event/v1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"app",
+						"update_event",
+						"v1"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				},
+				"description": "This updates an existing event given its ID, replacing any properties you specify. API Keys require the `edit_events` privilege to use this API. Only HTTP POST (JSON data) is acceptable. The parameters are as follows:\n\n| Parameter Name | Description |\n| --- | --- |\n| `id` | **(Required)** The ID of the event you wish to update. |\n| `reset_cursor` | (Optional) Reset the event clock to the given Epoch timestamp (see [Event Time Machine](https://github.com/jhuckaby/Cronicle/blob/master/docs/WebUI.md#event-time-machine)). |\n| `abort_jobs` | (Optional) If you are disabling the event by setting `enabled` to 0, you may also abort any running jobs if you want. |\n\nInclude anything from the [Event Data Object](https://github.com/jhuckaby/Cronicle/blob/master/docs/APIReference.md#event-data-format) to update (i.e. replace) the values. Anything omitted is preserved. Example request:\n\n``` json\n{\n    \"id\": \"3c182051\",\n    \"enabled\": 0,\n}\n\n ```\n\nExample request with everything updated:\n\n``` json\n{\n    \"id\": \"3c182051\",\n    \"reset_cursor\": 1451185588,\n    \"abort_jobs\": 0,\n    \"catch_up\": 1,\n    \"category\": \"43f8c57e\",\n    \"cpu_limit\": 100,\n    \"cpu_sustain\": 0,\n    \"detached\": 0,\n    \"enabled\": 1,\n    \"log_max_size\": 0,\n    \"max_children\": 1,\n    \"memory_limit\": 0,\n    \"memory_sustain\": 0,\n    \"multiplex\": 0,\n    \"notes\": \"This event handles database maintenance.\",\n    \"notify_fail\": \"\",\n    \"notify_success\": \"\",\n    \"params\": {\n        \"db_host\": \"idb01.mycompany.com\",\n        \"verbose\": 1,\n        \"cust\": \"Marketing\"\n    },\n    \"plugin\": \"test\",\n    \"retries\": 0,\n    \"retry_delay\": 30,\n    \"target\": \"db1.int.myserver.com\",\n    \"timeout\": 3600,\n    \"timezone\": \"America/New_York\",\n    \"timing\": {\n        \"hours\": [ 21 ],\n        \"minutes\": [ 20, 40 ]\n    },\n    \"title\": \"DB Reindex\",\n    \"username\": \"admin\",\n    \"web_hook\": \"http://myserver.com/notify-chronos.php\"\n}\n\n ```\n\nExample response:\n\n```\n{\n    \"code\": 0\n}\n\n ```"
+			},
+			"response": []
+		},
+		{
+			"name": "delete_event",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-API-Key",
+						"value": "{{API-KEY}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"id\": \"3c182051\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/app/delete_event/v1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"app",
+						"delete_event",
+						"v1"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				},
+				"description": "StartFragment\n\nThis deletes an existing event given its ID. Note that the event must not have any active jobs still running (or else an error will be returned). API Keys require the `delete_events` privilege to use this API. Only HTTP POST (JSON data) is acceptable. The parameters are as follows:\n\n| Parameter Name | Description |\n| --- | --- |\n| `id` | **(Required)** The ID of the event you wish to delete. |\n\nExample request:\n\n```\n{\n\t\"id\": \"3c182051\"\n}\n\n ```\n\nExample response:\n\n```\n{\n\t\"code\": 0\n}\n\n ```\n\nEndFragment"
+			},
+			"response": []
+		},
+		{
+			"name": "get_event_history",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-API-Key",
+						"value": "{{API-KEY}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/app/get_event_history/v1?id&offset&limit",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"app",
+						"get_event_history",
+						"v1"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": null
+						},
+						{
+							"key": "offset",
+							"value": null
+						},
+						{
+							"key": "limit",
+							"value": null
+						}
+					]
+				},
+				"description": "This fetches the event history (i.e. previously completed jobs) for a specific event. The response array is sorted by reverse timestamp (descending), so the latest jobs are listed first. The parameters are as follows:\n\n| Parameter Name | Description |\n| --- | --- |\n| `id` | The **Event ID** of the scheduled event you want to get history for. You can find this on the Edit Event page at the very top of the form, above the event title. |\n| `offset` | The offset into the data. Passing `0` means get the latest jobs. |\n| `limit` | The number of jobs to fetch. |\n\nExample request:\n\n``` json\n{\n    \"id\": \"3c182051\",\n    \"offset\": 0,\n    \"limit\": 100\n}\n\n ```\n\nExample response:\n\n``` json\n{\n    \"code\": 0,\n    \"rows\": [ {...}, {...}, ... ],\n    \"list\": { \"length\": 500 }\n}\n\n ```"
+			},
+			"response": []
+		},
+		{
+			"name": "get_history",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-API-Key",
+						"value": "{{API-KEY}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/app/get_history/v1?offset&limit",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"app",
+						"get_history",
+						"v1"
+					],
+					"query": [
+						{
+							"key": "offset",
+							"value": null
+						},
+						{
+							"key": "limit",
+							"value": null
+						}
+					]
+				},
+				"description": "This fetches previously completed jobs for **all** events. The response array is sorted by reverse timestamp (descending), so the latest jobs are listed first. The parameters are as follows:\n\n| Parameter Name | Description |\n| --- | --- |\n| `offset` | The offset into the data. Passing `0` means get the latest jobs. |\n| `limit` | The number of jobs to fetch. |\n\nExample request:\n\n``` json\n{\n    \"offset\": 0,\n    \"limit\": 100\n}\n\n ```\n\nExample response:\n\n``` json\n{\n    \"code\": 0,\n    \"rows\": [ {...}, {...}, ... ],\n    \"list\": { \"length\": 500 }\n}\n\n ```"
+			},
+			"response": []
+		},
+		{
+			"name": "run_event",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-API-Key",
+						"value": "{{API-KEY}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"id\": \"3c182051\",\r\n\t\"category\": \"43f8c57e\",\r\n\t\"cpu_limit\": 100,\r\n\t\"cpu_sustain\": 0,\r\n\t\"detached\": 0,\r\n\t\"log_max_size\": 0,\r\n\t\"max_children\": 1,\r\n\t\"memory_limit\": 0,\r\n\t\"memory_sustain\": 0,\r\n\t\"multiplex\": 0,\r\n\t\"notify_fail\": \"\",\r\n\t\"notify_success\": \"\",\r\n\t\"params\": {\r\n\t\t\"db_host\": \"idb01.mycompany.com\",\r\n\t\t\"verbose\": 1,\r\n\t\t\"cust\": \"Marketing\"\r\n\t},\r\n\t\"plugin\": \"test\",\r\n\t\"retries\": 0,\r\n\t\"retry_delay\": 30,\r\n\t\"target\": \"db1.internal.myserver.com\",\r\n\t\"timeout\": 3600,\r\n\t\"title\": \"DB Reindex\",\r\n\t\"username\": \"admin\",\r\n\t\"web_hook\": \"http://myserver.com/notify-chronos.php\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/app/run_event/v1?id=&title",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"app",
+						"run_event",
+						"v1"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": ""
+						},
+						{
+							"key": "title",
+							"value": null
+						}
+					]
+				},
+				"description": "This immediately starts an on-demand job for an event, regardless of the schedule. This is effectively the same as a user clicking the \"Run Now\" button in the UI. API Keys require the `run_events` privilege to use this API. Both HTTP GET (query string) or HTTP POST (JSON data) are acceptable. You can specify the target event by its ID or exact title:\n\n| Parameter Name | Description |\n| --- | --- |\n| `id` | The ID of the event you wish to run a job for. |\n| `title` | The exact title of the event you wish to run a job for (case-sensitive). |\n\nYou can also include almost anything from the [Event Data Object](https://github.com/jhuckaby/Cronicle/blob/master/docs/APIReference.md#event-data-format) to customize the settings for the job. Anything omitted is pulled from the event object. Example request:\n\n```\n{\n    \"id\": \"3c182051\"\n}\n\n ```\n\nExample request with everything customized:\n\n```\n{\n    \"id\": \"3c182051\",\n    \"category\": \"43f8c57e\",\n    \"cpu_limit\": 100,\n    \"cpu_sustain\": 0,\n    \"detached\": 0,\n    \"log_max_size\": 0,\n    \"max_children\": 1,\n    \"memory_limit\": 0,\n    \"memory_sustain\": 0,\n    \"multiplex\": 0,\n    \"notify_fail\": \"\",\n    \"notify_success\": \"\",\n    \"params\": {\n        \"db_host\": \"idb01.mycompany.com\",\n        \"verbose\": 1,\n        \"cust\": \"Marketing\"\n    },\n    \"plugin\": \"test\",\n    \"retries\": 0,\n    \"retry_delay\": 30,\n    \"target\": \"db1.internal.myserver.com\",\n    \"timeout\": 3600,\n    \"title\": \"DB Reindex\",\n    \"username\": \"admin\",\n    \"web_hook\": \"http://myserver.com/notify-chronos.php\"\n}\n\n ```"
+			},
+			"response": []
+		},
+		{
+			"name": "get_job_status",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-API-Key",
+						"value": "{{API-KEY}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/app/get_job_status/v1?id",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"app",
+						"get_job_status",
+						"v1"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": null
+						}
+					]
+				},
+				"description": "This fetches status for a job currently in progress, or one already completed. Both HTTP GET (query string) or HTTP POST (JSON data) are acceptable. Parameters:\n\n| Parameter Name | Description |\n| --- | --- |\n| `id` | **(Required)** The ID of the job you wish to fetch status on. |\n\nExample request:\n\n``` json\n{\n    \"id\": \"jiinxhh5203\"\n}\n\n ```\n\nExample response:\n\n``` json\n{\n    \"code\": 0,\n    \"job\": {\n        \"params\": {\n            \"db_host\": \"idb01.mycompany.com\",\n            \"verbose\": 1,\n            \"cust\": \"Marketing\"\n        },\n        \"timeout\": 3600,\n        \"catch_up\": 1,\n        \"plugin\": \"test\",\n        \"category\": \"43f8c57e\",\n        \"retries\": 0,\n        \"detached\": 0,\n        \"notify_success\": \"jhuckaby@test.com\",\n        \"notify_fail\": \"jhuckaby@test.com\",\n        \"web_hook\": \"http://myserver.com/notify-chronos.php\",\n        \"notes\": \"Joe testing.\",\n        \"multiplex\": 0,\n        \"memory_limit\": 0,\n        \"memory_sustain\": 0,\n        \"cpu_limit\": 0,\n        \"cpu_sustain\": 0,\n        \"log_max_size\": 0,\n        \"retry_delay\": 30,\n        \"timezone\": \"America/New_York\",\n        \"source\": \"Manual (admin)\",\n        \"id\": \"jiiqjexr701\",\n        \"time_start\": 1451341765.987,\n        \"hostname\": \"joeretina.local\",\n        \"command\": \"bin/test-plugin.js\",\n        \"event\": \"3c182051\",\n        \"now\": 1451341765,\n        \"event_title\": \"Test Event 2\",\n        \"plugin_title\": \"Test Plugin\",\n        \"category_title\": \"Test Cat\",\n        \"nice_target\": \"joeretina.local\",\n        \"log_file\": \"/opt/cronicle/logs/jobs/jiiqjexr701.log\",\n        \"pid\": 11743,\n        \"progress\": 1,\n        \"cpu\": {\n            \"min\": 19,\n            \"max\": 19,\n            \"total\": 19,\n            \"count\": 1,\n            \"current\": 19\n        },\n        \"mem\": {\n            \"min\": 214564864,\n            \"max\": 214564864,\n            \"total\": 214564864,\n            \"count\": 1,\n            \"current\": 214564864\n        },\n        \"complete\": 1,\n        \"code\": 0,\n        \"description\": \"Success!\",\n        \"perf\": \"scale=1&total=90.319&db_query=3.065&db_connect=5.096&log_read=7.425&gzip_data=11.094&http_post=17.72\",\n        \"log_file_size\": 25110,\n        \"time_end\": 1451341856.61,\n        \"elapsed\": 90.62299990653992\n    }\n}\n\n ```\n\nIn the `job` object you'll find all the standard [Event Data Object](https://github.com/jhuckaby/Cronicle/blob/master/docs/APIReference.md#event-data-format) properties, as well as the following properties unique to this API:\n\n| Property Name | Description |\n| --- | --- |\n| `hostname` | The hostname of the server currently running, or the server who ran the job. |\n| `source` | If the job was started manually via user or API, this will contain a text string identifying who it was. |\n| `log_file` | A local filesystem path to the job's log file (only applicable if job is in progress). |\n| `pid` | The main PID of the job process that was spawned. |\n| `progress` | Current progress of the job, from `0.0` to `1.0`, as reported by the Plugin (optional). |\n| `complete` | Will be set to `1` when the job is complete, omitted if still in progress. |\n| `code` | A code representing job success (`0`) or failure (any other value). Only applicable for completed jobs. |\n| `description` | If the job failed, this will contain the error message. Only applicable for completed jobs. |\n| `perf` | [Performance metrics](https://github.com/jhuckaby/Cronicle/blob/master/docs/Plugins.md#performance-metrics) for the job, if reported by the Plugin (optional). Only applicable for completed jobs. |\n| `time_start` | A Unix Epoch timestamp of when the job started. |\n| `time_end` | A Unix Epoch timestamp of when the job completed. Only applicable for completed jobs. |\n| `elapsed` | The elapsed time of the job, in seconds. |\n| `cpu` | An object representing the CPU use of the job. See below. |\n| `mem` | An object representing the memory use of the job. See below. |\n\nThroughout the course of a job, its process CPU and memory usage are measured periodically, and tracked in these objects:\n\n```\n{\n    \"cpu\": {\n        \"min\": 19,\n        \"max\": 19,\n        \"total\": 19,\n        \"count\": 1,\n        \"current\": 19\n    },\n    \"mem\": {\n        \"min\": 214564864,\n        \"max\": 214564864,\n        \"total\": 214564864,\n        \"count\": 1,\n        \"current\": 214564864\n    }\n}\n\n ```\n\nThe CPU is measured as percentage of one CPU core, so 100 means that a full CPU core is in use. It may also go above 100, if multiple threads or sub-processes are in use. The current value can be found in `current`, and the minimum (`min`) and maximum (`max`) readings are also tracked. To compute the average, divide the `total` value by the `count`.\n\nThe memory usage is measured in bytes. The current value can be found in `current`, and the minimum (`min`) and maximum (`max`) readings are also tracked. To compute the average, divide the `total` value by the `count`."
+			},
+			"response": []
+		},
+		{
+			"name": "get_active_jobs",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-API-Key",
+						"value": "{{API-KEY}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/app/get_active_jobs/v1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"app",
+						"get_active_jobs",
+						"v1"
+					]
+				},
+				"description": "This fetches status for **all active** jobs, and returns them all at once. It takes no parameters (except an [API Key](https://github.com/jhuckaby/Cronicle/blob/master/docs/APIReference.md#api-keys) of course). The response format is as follows:\n\n```\n{\n    \"code\": 0,\n    \"jobs\": {\n        \"jk6lmar4c01\": {\n            ...\n        },\n        \"jk6lmar4d04\": {\n            ...\n        }\n    }\n}\n\n ```"
+			},
+			"response": []
+		},
+		{
+			"name": "update_job",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-API-Key",
+						"value": "{{API-KEY}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"id\": \"j3c182051\",\r\n\t\"timeout\": 300,\r\n\t\"notify_success\": \"email@server.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/app/update_job/v1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"app",
+						"update_job",
+						"v1"
+					]
+				},
+				"description": "This updates a job that is already in progress. Only certain job properties may be changed when the job is running, and those are listed below. This is typically used to adjust timeouts, resource limits, or user notification settings. API Keys require the `edit_events` privilege to use this API. Only HTTP POST (JSON data) is acceptable. The parameters are as follows:\n\n| Parameter Name | Description |\n| --- | --- |\n| `id` | **(Required)** The ID of the job you wish to update. |\n| `timeout` | (Optional) The total run time in seconds to allow, before the job is aborted. |\n| `retries` | (Optional) The number of retries before the job is reported a failure. |\n| `retry_delay` | (Optional) The number of seconds between retries. |\n| `chain` | (Optional) Launch another event when the job completes successfully (see [Chain Reaction](https://github.com/jhuckaby/Cronicle/blob/master/docs/WebUI.md#chain-reaction)). |\n| `chain_error` | (Optional) Launch another event when the job fails (see [Chain Reaction](https://github.com/jhuckaby/Cronicle/blob/master/docs/WebUI.md#chain-reaction)). |\n| `notify_success` | (Optional) A comma-separated list of e-mail addresses to notify on job success. |\n| `notify_fail` | (Optional) A comma-separated list of e-mail addresses to notify on job failure. |\n| `web_hook` | (Optional) A fully-qualified URL to ping when the job completes. |\n| `cpu_limit` | (Optional) The maximum allowed CPU before the job is aborted (100 = 1 CPU core). |\n| `cpu_sustain` | (Optional) The number of seconds to allow the max CPU to be exceeded. |\n| `memory_limit` | (Optional) The maximum allowed memory usage (in bytes) before the job is aborted. |\n| `memory_sustain` | (Optional) The number of seconds to allow the max memory to be exceeded. |\n| `log_max_size` | (Optional) The maximum allowed job log file size (in bytes) before the job is aborted. |\n\nAs shown above, you can include _some_ of the properties from the [Event Data Object](https://github.com/jhuckaby/Cronicle/blob/master/docs/APIReference.md#event-data-format) to customize the job in progress. Example request:\n\n```\n{\n    \"id\": \"j3c182051\",\n    \"timeout\": 300,\n    \"notify_success\": \"email@server.com\"\n}\n\n ```\n\nExample response:\n\n```\n{\n    \"code\": 0\n}\n\n ```"
+			},
+			"response": []
+		},
+		{
+			"name": "abort_job",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-API-Key",
+						"value": "{{API-KEY}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"id\": \"jiinxhh5203\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/app/abort_job/v1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"app",
+						"abort_job",
+						"v1"
+					]
+				},
+				"description": "StartFragment\n\nThis aborts a running job given its ID. API Keys require the `abort_events` privilege to use this API. Only HTTP POST (JSON data) is acceptable. The parameters are as follows:\n\n| Parameter Name | Description |\n| --- | --- |\n| `id` | **(Required)** The ID of the job you wish to abort. |\n\nExample request:\n\n``` json\n{\n    \"id\": \"jiinxhh5203\"\n}\n\n ```\n\nExample response:\n\n``` json\n{\n    \"code\": 0\n}\n\n ```"
+			},
+			"response": []
+		},
+		{
+			"name": "get_master_state",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-API-Key",
+						"value": "{{API-KEY}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/app/get_master_state/v1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"app",
+						"get_master_state",
+						"v1"
+					]
+				},
+				"description": "This fetches the current application \"state\", which contains information like the status of the scheduler (enabled or disabled). The API accepts no parameters. Example response:\n\n``` json\n{\n    \"code\": 0,\n    \"state\": { \"enabled\": 1 }\n}\n\n ```"
+			},
+			"response": []
+		},
+		{
+			"name": "update_master_state",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-API-Key",
+						"value": "{{API-KEY}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"enabled\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/app/update_master_state/v1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"app",
+						"update_master_state",
+						"v1"
+					]
+				},
+				"description": "This updates the master application state, i.e. toggling the scheduler on/off. API Keys require the `state_update` privilege to use this API. Only HTTP POST (JSON data) is acceptable. The parameters are as follows:\n\n| Parameter Name | Description |\n| --- | --- |\n| `enabled` | **(Required)** The desired new state of the scheduler (`1` for enabled or `0` for disabled). |\n\nExample request:\n\n``` json\n{\n    \"enabled\": 1\n}\n\n ```\n\nExample response:\n\n``` json\n{\n    \"code\": 0\n}\n\n ```"
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://172.22.114.200",
+			"type": "default"
+		},
+		{
+			"key": "API-KEY",
+			"value": "284b70463c80710896fd158567fb8607",
+			"type": "default"
+		}
+	]
+}
