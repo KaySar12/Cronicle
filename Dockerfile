@@ -14,6 +14,8 @@ RUN chmod +x /setup/install.js && \
     ./install_gvm.sh && \
     node /setup/install.js && \
     cd /opt/cronicle
+WORKDIR /opt/cronicle
+# COPY node_modules .  
 RUN npm install couchbase@2.6.12
 EXPOSE 3012
 EXPOSE 3014

@@ -8,7 +8,7 @@ then
 else 
   echo "Running MASTER server"
   # if [ ! -d "/opt/cronicle/data" ]; then
-  echo " performing setup..."
+  #   echo "Data directory doesn't exist, performing setup..."
     /opt/cronicle/bin/control.sh setup
   # fi
 fi

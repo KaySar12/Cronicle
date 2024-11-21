@@ -8,5 +8,8 @@ APP_NAME=cronicle
 IMAGE_TAG=1.0
 build_image:
 	$(DOCKERBUILD) -t ${DOCKER_USERNAME}/$(APP_NAME):$(IMAGE_TAG) .
+
+build_image_clean:
+	$(DOCKERBUILD) --no-cache -t ${DOCKER_USERNAME}/$(APP_NAME):$(IMAGE_TAG) .
 push_image:
 	$(DOCKERPUSH) ${DOCKER_USERNAME}/$(APP_NAME):$(IMAGE_TAG)
