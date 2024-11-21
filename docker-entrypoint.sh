@@ -7,10 +7,10 @@ then
   echo "Running SLAVE server"
 else 
   echo "Running MASTER server"
-  if [ ! -d "/opt/cronicle/data" ]; then
-    echo "Data directory doesn't exist, performing setup..."
+  # if [ ! -d "/opt/cronicle/data" ]; then
+  echo " performing setup..."
     /opt/cronicle/bin/control.sh setup
-  fi
+  # fi
 fi
 
 /opt/cronicle/bin/control.sh start

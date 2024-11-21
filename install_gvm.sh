@@ -1,7 +1,7 @@
 #!/bin/bash
-
+set -x
 # Install GVM
-curl -v -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer | bash
+/setup/gvm-installer
 
 # Source GVM
 source /root/.gvm/scripts/gvm

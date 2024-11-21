@@ -1,2 +1,16 @@
 node_modules
 deploy
+/node_modules
+/work
+/logs
+/queue
+/data
+/conf
+htdocs/index.html
+htdocs/js/common
+htdocs/js/external/*
+htdocs/fonts/*
+htdocs/css/base.css
+htdocs/css/c3*
+htdocs/css/font*
+htdocs/css/mat*
